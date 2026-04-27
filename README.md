@@ -1,10 +1,11 @@
-# WEBB24 ALM: Gruppuppgift
+# WEBB25 ALM: Gruppuppgift
 
 ## Beskrivning
 
 Detta är en gruppuppgift för kursen Applikationslivscykelhantering på Nackademin.
+
 **Gruppstorlek:** 2 - 4 personer
-**Datum:** 2025-05-23
+**Datum:** 2026-05-25
 **Tid:** 09:00 - 17:00
 
 ## Instruktioner
@@ -13,81 +14,75 @@ Gruppen ska forka detta repository och sätta upp projektet med nödvändiga ver
 
 ### Teknologier
 
-- Git - för versionshantering
-- GitHub - för versionshantering och Actions
-- Docker - för containerisering
+- Git – för versionshantering
+- GitHub – för versionshantering och Actions
+- Docker – för containerisering
 
 ### Kod
 
-- Express - för API:et
-- SQLite - för databasen
-- Sequelize - för databas ORM
-- Jest - för testning av modeller
+- Express – för API:et
+- MongoDB – för databasen
+- Mongoose – för databas ORM
+- Vitest – för testning av modeller
 
 ### Uppgifter
 
-Av de nedanstående uppgifterna måste gruppen slutföra följande. Alla i gruppen måste bidra till koden. Detta kommer att göras genom att ha ett enda repo med flera bidragsgivare. Och skapa pull requests för varje ny funktion.
+Alla i gruppen måste bidra till koden. Detta görs genom att ha ett enda repo med flera bidragsgivare och skapa pull requests för varje ny funktion.
 
 **Obligatoriska uppgifter**
 
-- [ ] **Koden kommer att ha sina tester köra med GitHub Actions**
-- [ ] **Koden kommer att containeriseras med en Dockerfile**
-- [ ] **Accomodation model ska ha en adress, stad, land, postnummer, hyra, rum och eventuellt userId (behöver tester)**
-- [ ] **User model ska tvinga unik e-post och användarnamn samt validera e-postformat (behöver tester)**
-- [ ] **User model ska ha ett profilbildsfält som är en url till en bild (behöver tester)**
-- [ ] **Accomodation model ska CASCADE-raderas när användaren raderas (behöver tester)**
+- [ ] **Testerna körs automatiskt med GitHub Actions vid push och PR mot main**
+- [ ] **Koden containeriseras med en Dockerfile**
+- [ ] **Accommodation-modellen ska ha adress, stad, land, postnummer, hyra, rum och en referens till userId (behöver tester)**
+- [ ] **User-modellen ska tvinga unik e-post och unikt användarnamn (behöver tester)**
+- [ ] **User-modellen ska ha ett profilbildsfält som är en URL till en bild (behöver tester)**
+- [ ] **Accommodation-modellen ska raderas när användaren raderas (behöver tester)**
 
 ### Individuella uppgifter för VG
 
-Om du inte är repo-ägaren, forka repot till ditt eget GitHub-konto och gör följande ändringar. Om du är det, fortsätt bara med uppgifterna nedan:
+Om du inte är repo-ägaren, forka repot till ditt eget GitHub-konto och gör följande. Om du är repo-ägare, fortsätt direkt med uppgifterna nedan.
 
-- [ ] **Uppdatera databasen för att använda PostgreSQL**
-- [ ] **Uppdatera koden för att använda PostgreSQL**
-- [ ] **Skapa en docker-compose.yml-fil för att starta applikationen med PostgreSQL**
-- [ ] **distribuera lokalt med docker compose**
+- [ ] **Skapa en `docker-compose.yml` som startar både applikationen och MongoDB**
+- [ ] **Verifiera att applikationen fungerar via Docker Compose lokalt**
 
-_docker/docker-compose.yml_
+Exempel på struktur för `docker/docker-compose.yml`:
 
-```
-version: '3.8'
+```yaml
 services:
   db:
-    image: postgres:15
+    image: mongo:latest
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
     ports:
-      - "5432:5432"
-
+      - "27017:27017"
     volumes:
-      - pgdata:/var/lib/postgresql/data
-app:
-    ...
+      - mongo_data:/data/db
+
+  app:
     build:
-        context: .
-        dockerfile: dockerfile
+      context: .
+      dockerfile: docker/dockerfile
     environment:
-      DB_HOST: db
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: postgres
+      - MONGODB_URI=mongodb://admin:password@db:27017/webb25_alm?authSource=admin
+      - PORT=3000
     ports:
-        ...
+      - "3000:3000"
     depends_on:
       - db
+
 volumes:
-  pgdata:
+  mongo_data:
 ```
 
-_Distribuera lokalt med docker compose_
+Starta applikationen:
 
-```
-docker compose up ./docker/docker-compose.yml
+```bash
+docker compose -f docker/docker-compose.yml up -d
 ```
 
-_Stäng ner applikationen_
+Stäng ner applikationen:
 
-```
-docker compose down ./docker/docker-compose.yml
+```bash
+docker compose -f docker/docker-compose.yml down
 ```

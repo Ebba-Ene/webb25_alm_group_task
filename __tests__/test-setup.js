@@ -1,15 +1,22 @@
-// test-setup.js
-process.env.NODE_ENV = "test";
-const sequelize = require("../src/config/database");
-const User = require("../src/models/User");
-// TODO: Add Accomodation model
+const { MongoMemoryServer } = require("mongodb-memory-server");
+const mongoose = require("mongoose");
+const { beforeAll, afterAll, afterEach } = require("vitest");
+
+let mongoServer;
 
 beforeAll(async () => {
-  await sequelize.sync();
+  mongoServer = await MongoMemoryServer.create();
+  await mongoose.connect(mongoServer.getUri());
+});
+
+afterEach(async () => {
+  const collections = mongoose.connection.collections;
+  for (const key in collections) {
+    await collections[key].deleteMany({});
+  }
 });
 
 afterAll(async () => {
-  await sequelize.close();
+  await mongoose.disconnect();
+  await mongoServer.stop();
 });
-
-module.exports = { sequelize, User };

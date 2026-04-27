@@ -1,21 +1,21 @@
-const { User } = require("../test-setup");
+require("../test-setup");
+const { describe, it, expect } = require("vitest");
+const User = require("../../src/models/User");
 
 describe("User Model", () => {
   it("should create a user", async () => {
-    const user = await User.create({ username: "testuser", email: "test@test.com" })
+    const user = await User.create({
+      username: "testuser",
+      email: "test@test.com",
+    });
 
     expect(user).toBeDefined();
     expect(user.username).toBe("testuser");
     expect(user.email).toBe("test@test.com");
   });
 
-  it("should validate email format", async () => {
-    // Build: Create a new user instance without saving it to the database
-    const user = User.build({ username: "testuser", email: "invalid-email" });
-    // Validate: Check if the user instance is valid
-    // rejects.toThrow() is used to check if the user instance is invalid
-    expect(user.validate()).rejects.toThrow();
-  });
-  
+  // TODO: Test that email must be unique
+  // TODO: Test that username must be unique
+  // TODO: Test that email format is validated
+  // TODO: Test that profileImage is a valid URL
 });
-

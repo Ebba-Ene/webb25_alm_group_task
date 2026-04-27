@@ -1,22 +1,16 @@
-const { Sequelize } = require("sequelize");
+const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
 dotenv.config();
 
-let sequelize;
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("MongoDB connected successfully.");
+  } catch (error) {
+    console.error("Unable to connect to MongoDB:", error);
+    process.exit(1);
+  }
+};
 
-if (process.env.NODE_ENV !== "test") {
-  sequelize = new Sequelize({
-    dialect: "sqlite",
-    storage: process.env.DB_PATH,
-    logging: false, // Set to console.log to see SQL queries
-  });
-} else {
-  sequelize = new Sequelize({
-    dialect: "sqlite",
-    storage: ":memory:",
-    logging: false, // Set to console.log to see SQL queries
-  });
-}
-
-module.exports = sequelize;
+module.exports = connectDB;
