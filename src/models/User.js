@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // TODO: Add profileImage field
+    // TODO: Add profile picture field
   },
   { timestamps: true }
 );
