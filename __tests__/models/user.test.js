@@ -55,4 +55,23 @@ describe("User Model", () => {
       User.create({ username: "sameuser", email: "test2@test.com" }),
     ).rejects.toThrow()
   })
+
+  it("Should reject invalid profileImage URL", async () => {
+    await expect(
+      User.create({
+        username: "sameuser",
+        email: "correct@gmail.com",
+        profileImage: "avatar.png",
+      }),
+    ).rejects.toThrow()
+  })
+
+  it("Should require email to match valid format", async () => {
+    await expect(
+      User.create({
+        username: "sameuser",
+        email: "not.my.correct.nail.www.com",
+      }),
+    ).rejects.toThrow()
+  })
 })
