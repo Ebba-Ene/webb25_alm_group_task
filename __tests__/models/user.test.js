@@ -11,12 +11,12 @@ describe("User & Accommodation relationship", () => {
     })
 
     const accommodation = await Accommodation.create({
-      adress: "Sveavägen 13",
-      stad: "Stockholm",
-      land: "Sverige",
-      postnummer: "000008",
-      hyra: 3000,
-      rum: 2,
+      address: "Sveavägen 13",
+      city: "Stockholm",
+      country: "Sverige",
+      zipCode: "000008",
+      rent: 3000,
+      room: 2,
       user: user._id,
     })
 
@@ -28,5 +28,31 @@ describe("User & Accommodation relationship", () => {
     await User.findOneAndDelete({ _id: user._id })
     const deletedAccommodation = await Accommodation.findById(accommodation._id)
     expect(deletedAccommodation).toBeNull()
+  })
+})
+
+describe("User Model", () => {
+  it("Should create a user", async () => {
+    const user = await User.create({
+      username: "testuser",
+      email: "test@test.com",
+    })
+    expect(user).toBeDefined()
+    expect(user.username).toBe("testuser")
+    expect(user.email).toBe("test@test.com")
+  })
+
+  it("Should require unique email", async () => {
+    await User.create({ username: "sameuser1", email: "test1@test.com" })
+    await expect(
+      User.create({ username: "sameuser2", email: "test1@test.com" }),
+    ).rejects.toThrow()
+  })
+
+  it("Should require unique username", async () => {
+    await User.create({ username: "sameuser", email: "test1@test.com" })
+    await expect(
+      User.create({ username: "sameuser", email: "test2@test.com" }),
+    ).rejects.toThrow()
   })
 })
