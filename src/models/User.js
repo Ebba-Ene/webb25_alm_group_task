@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
     },
     profileImage: {
       type: String,
+      match: [
+        /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp|svg))$/i,
+        "Invalid image URL format",
+      ],
     },
   },
   { timestamps: true },
