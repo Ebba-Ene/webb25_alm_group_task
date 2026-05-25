@@ -1,18 +1,37 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
+const Accommodation = require("./Accommodation")
 
 const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
       required: true,
+      unique: true,
     },
     email: {
       type: String,
       required: true,
+      unique: true,
+      match: [/^\S+@\S+\.\S+$/, "Invalid email format"],
     },
-    // TODO: Add profileImage field
+    profileImage: {
+      type: String,
+      match: [
+        /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp|svg))$/i,
+        "Invalid image URL format",
+      ],
+    },
   },
-  { timestamps: true }
-);
+  { timestamps: true },
+)
+userSchema.pre("findOneAndDelete", async function (next) {
+  const user = await this.model.findOne(this.getFilter())
 
-module.exports = mongoose.model("User", userSchema);
+  if (user) {
+    await Accommodation.deleteMany({ user: user._id })
+  }
+
+  next()
+})
+
+module.exports = mongoose.model("User", userSchema)
