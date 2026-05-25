@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      match: [/^\S+@\S+\.\S+$/, "Ogiltig e-postadress"],
+      match: [/^\S+@\S+\.\S+$/, "Invalid email format"],
     },
     profileImage: {
       type: String, 
