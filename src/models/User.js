@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      match: [/^\S+@\S+\.\S+$/, "Ogiltig e-postadress"],
     },
     profileImage: {
       type: String, 
