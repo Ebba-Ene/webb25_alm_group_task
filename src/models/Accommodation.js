@@ -2,49 +2,47 @@ const mongoose = require("mongoose")
 
 const accommodationSchema = new mongoose.Schema(
   {
-    adress: {
+    address: {
       type: String,
-      required: [true, "Adress is required"],
-      trim: true,
+      required: [true, 'Address is required'],
+      trim: true
     },
-    stad: {
+    city: {
       type: String,
-      required: [true, "Stad is required"],
-      trim: true,
+      required: [true, 'City is required'],
+      trim: true
     },
-    land: {
+    country: {
       type: String,
-      required: [true, "Land is required"],
-      trim: true,
+      required: [true, 'Country is required'],
+      trim: true
     },
-    postnummer: {
+    zipCode: {
       type: String,
-      required: [true, "Postnummer is required"],
-      trim: true,
+      required: [true, 'Zip Code is required'],
+      trim: true
     },
 
-    hyra: {
+    rent: {
       type: Number,
       min: 0,
-      required: [true, "Hyra is required"],
-      trim: true,
+      required: [true, 'Rent is required'],
+      trim: true
     },
-    rum: {
+    room: {
       type: Number,
       min: 1,
-      required: [true, "Rum is required"],
-      trim: true,
-    },
+      required: [true, 'Room is required'],
+      trim: true
+    }, 
 
     user: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: "User",
-      required: [true, "User is required"],
-    },
-  },
-  {
-    timestamps: true,
-  },
+      ref: 'User'
+    }
+  }, {
+    timestamps: true
+  }
 )
 
 module.exports =
